@@ -13,7 +13,7 @@
         <v-spacer></v-spacer>
       </v-card-actions>
 
-      <List :todos="todos" @removeItem="removeTodo" />
+      <List :todos="storedTodos" @removeItem="removeTodo" />
     </v-card>
   </v-container>
 </template>
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       currentTodo: "",
-      todos: [],
+      todos: this.$store.state.todos,
     };
   },
   components: {
@@ -36,11 +36,17 @@ export default {
   },
   methods: {
     addTodo() {
-      this.todos.push(this.currentTodo);
+      this.$store.dispatch("addTodo", this.currentTodo);
       this.currentTodo = "";
     },
     removeTodo(itemKey) {
+      this.$store.dispatch("removeTodo", this.currentTodo);
       this.todos.shift(itemKey);
+    },
+  },
+  computed: {
+    storedTodos() {
+      return this.$store.getters.getTodos;
     },
   },
 };
